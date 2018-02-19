@@ -21,7 +21,7 @@
 
 * owner can allocate tokens to users by calling function **allocate()**. Argument provided to the function is an address of token recipient and amount of tokens to transfer. Tokens passed should take into account number of decimals. E.g if 10 tokens are allocated to the account, number representing 10 tokens is 10 plus 8 zeros and appears like this **1000000000**.
 
-* Token recipient can claim their tokens by sending 0 ether transaction to the contract. Most useful way of calling this function is either through **MyEtherWallet** or **Metamask**.
+* Token recipient can claim their tokens by sending 0 ether transaction to the **Allocate** contract. Most useful way of calling this function is either through **MyEtherWallet** or **Metamask**.
 
 * In order for token recipients to be able to claim their token, contract owner has to call **updateClaimStatus()** and pass number **1** as an argument to set  the flag **claimingEnabled** to true.
 
