@@ -35,7 +35,7 @@
 
 * After initial deployment token contract is set to block transaction of tokens by token owners. This is useful when contract owner wants to disable trading of tokens before all recipients claimed their tokens or before e.g. tokens can be vested if such period is part of the plan. Owner is allowed to transfer tokens while they are in locked status. 
 
-To unblock tokens and allow to be transfered by any token owner, contract owner needs to call function **unlock()** to make tokens transferable. To lock tokens again, owner can call function **lock()**.
+*To unblock tokens and allow to be transfered by any token owner, contract owner needs to call function **unlock()** to make tokens transferable. To lock tokens again, owner can call function **lock()**.
 
 * Allocation is designed in such a way that owner can allocate tokens several times to the same account. Token recipient can claim their tokens at any time and contract will keep track of tokens already claimed and will only release tokens which were not claimed to this moment. 
 
