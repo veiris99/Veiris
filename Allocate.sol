@@ -1,4 +1,4 @@
-pragma solidity ^ 0.4.17;
+pragma solidity ^ 0.4.20;
 
 
 library SafeMath {
@@ -60,10 +60,10 @@ contract Ownable {
 }
 
 
-
 // Crowdsale Smart Contract
-// This smart contract collects ETH and in return sends tokens to contributors
-contract Allocate is Ownable{
+// This smart contract allows owner on allocating tokens for contributors
+// Token owners then can claim tokens 
+contract Allocate is Ownable {
 
     using SafeMath for uint;
 
@@ -137,7 +137,7 @@ contract Allocate is Ownable{
         claimTokensForUser(msg.sender);
     }
 
-    // @notice this function can be called by admin to claim user's token in case of difficulties
+    // @notice this function can be called by admin to claim user's token in case of difficulties
     // @param _backer {address} user address to claim tokens for
     function adminClaimTokenForUser(address _backer) external onlyOwner() {
         claimTokensForUser(_backer);
@@ -161,7 +161,7 @@ contract Allocate is Ownable{
            
         Backer storage backer = backers[_backer];
                 
-        require(!backer.claimed); // if tokens claimed, don't allow claiming again    
+        require(!backer.claimed); // if tokens claimed, don't allow refunding     
         uint tokensRemaning = backer.tokensToSend - claimed[_backer];  // see if there are any tokens to claim     
         require(tokensRemaning > 0);   // only continue if there are any tokens to send           
 
@@ -177,7 +177,8 @@ contract Allocate is Ownable{
     }
 
     // @notice It will be called by fallback function whenever ether is sent to it
-    // @param  _backer {address} address of contributor
+    // @param _backer {address} address of contributor
+    // @param _tokenAmount {uint} amount of tokens to claim
     // @return res {bool} true if transaction was successful
     function allocate(address _backer, uint _tokenAmount) external onlyOwner() returns(bool res) {        
             
