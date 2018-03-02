@@ -176,11 +176,12 @@ contract Allocate is Ownable {
         TokensClaimed(_backer, tokensRemaning);  
     }
 
-    // @notice It will be called by fallback function whenever ether is sent to it
+    // @notice It will be called by owner to allocate tokens to users
     // @param _backer {address} address of contributor
     // @param _tokenAmount {uint} amount of tokens to claim
     // @return res {bool} true if transaction was successful
-    function allocate(address _backer, uint _tokenAmount) external onlyOwner() returns(bool res) {        
+    function allocate(address _backer, uint _tokenAmount) external onlyOwner() returns(bool res) {   
+            
             
         Backer storage backer = backers[_backer];
 
@@ -203,8 +204,40 @@ contract Allocate is Ownable {
         return true;
     }    
 
-}
+    // @notice It will be called to allocate tokens to users in mass fashion
+    // @param _backer {address} address of contributor
+    // @param _tokenAmount {uint} amount of tokens to claim
+    // @return res {bool} true if transaction was successful
+    function allocateMultiple(address[] _backer, uint[] _tokenAmount) external onlyOwner() returns(bool res) {   
+            
 
+        for (uint i = 0; i < _backer.length; ++i) {
+            
+            Backer storage backer = backers[_backer[i]];
+
+            if (backer.tokensToSend == 0)
+                backersIndex.push(_backer[i]);
+            else
+                backer.claimed = false;   // allow for multiple additions of tokens for the same account
+                                        // claim function will allow multiple claims
+         
+            backer.tokensToSend += _tokenAmount[i]; // save contributor's total tokens sent
+                                             // function will sum tokens added in multiple steps
+            totalTokensAllocated += totalTokensAllocated.add(_tokenAmount[i]);     // update the total amount of tokens sent      
+
+            require(totalTokensAllocated <= maxCap);  
+            TokensAllocated(_backer[i], _tokenAmount[i]); // Register event
+           
+        //if (!token.transfer(_backer, _tokenAmount)) // Transfer tokens. Leave this as alternative. 
+        //    revert();  
+         }       
+        
+        return true;
+    }    
+
+
+
+}
 
 contract ERC20 {
     uint public totalSupply;
